@@ -14,7 +14,11 @@
 * `j` or `down` to select next result
 * `i` to ignore current result (reduce opacity)
 * `s` to star the current result (bgcolor highlight)
-* `m` to show inline google map for location
-* `p` to show inline photos
-* `o` to open listing page
+* `m` to toggle inline google map for location
+* `p` to toggle inline photos
 * `t` to edit tags/notes for result
+* `o` to navigate to result page
+
+## padmapper?
+
+yes, i know about padmapper. it's a great tool. [use it](http://padmapper.com).
