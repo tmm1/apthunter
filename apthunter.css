@@ -1,10 +1,22 @@
 p.ignored {
-  opacity: 0.2;
+  opacity: 0.25;
 }
 p.starred {
-  background-color: yellow;
+  background-color: #fff5d0;
 }
 p.current {
   outline: 1px dashed gray;
   outline-offset: 7px;
+  opacity: 1.0;
+}
+p.current.ignored {
+  opacity: 0.5;
+}
+span.tags {
+  color: green;
+  font-size: smaller;
+  padding-left: 5px;
+}
+div.images {
+  text-align: center;
 }

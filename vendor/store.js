@@ -44,7 +44,7 @@ var store = (function(){
 		return JSON.stringify(value)
 	}
 	api.deserialize = function(value) {
-		if (typeof value != 'string') { return undefined }
+		if (typeof value != 'string' || !value) { return undefined }
 		return JSON.parse(value)
 	}
 
