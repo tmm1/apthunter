@@ -150,8 +150,8 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
 
 }
 
-// on apartment search result pages
-if (document.location.pathname.match(/search\/apa\//)) {
+// on apartment search result or listing pages
+if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
 
   // find results
   var results = $('h4.ban ~ p')
