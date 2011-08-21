@@ -17,6 +17,11 @@ span.tags {
   font-size: smaller;
   padding-left: 5px;
 }
-div.images {
+div.images, div.maps {
   text-align: center;
+  background-color: #eee;
+  padding: 10px;
+}
+div.images img {
+  vertical-align: middle;
 }

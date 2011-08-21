@@ -85,6 +85,23 @@ var UI = {
     } else if (CL.isStarred(result)) {
       result.addClass('starred')
     }
+  },
+  toggleInfoForResult: function(result, type, cb){
+    if (currentResult.next('div.'+type).length) {
+      var container = currentResult.next('div.'+type)
+      container.slideUp('fast', function(){
+        container.remove()
+      })
+
+    } else {
+      var container = $('<div class="'+type+'" style="display:none">')
+      currentResult.after(container)
+
+      CL.getDetailsForResult(currentResult, function(details){
+        cb(container, details)
+        container.slideDown('fast')
+      })
+    }
   }
 }
 
@@ -94,22 +111,8 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
 
   var mailto = $('a[href*="mailto"]'),
       maps = $('a:contains("google map")'),
-      images = []
-
-  $('img').each(function(){
-    var img = $(this),
-        src = this.src,
-        w = img.width(),
-        h = img.height()
-
-    if (w+h && (w < 100 || h < 100 || w/h > 1.8 || h/w > 1.8)) {
-      // ignore
-    } else if (images.indexOf(src) > -1) {
-      // already exists
-    } else {
-      images.push(src)
-    }
-  })
+      srcs = $('img').map(function(){ return this.src }),
+      images = $.makeArray(srcs).unique()
 
   var details = {
     title: $('h2').text(),
@@ -117,7 +120,6 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
     address: maps.length ? decodeURIComponent(maps[0].href.match(/q=(.*)$/)[1]) : null,
     images: images
   }
-  console.log(details)
 
   CL.addToCache(result_id, details)
 }
@@ -198,30 +200,46 @@ if (document.location.pathname.match(/search\/apa\//)) {
     },
     // photos
     'p': function(){
-      if (currentResult.next('div.images').length) {
-        var container = currentResult.next('div.images')
-        container.slideUp('fast', function(){
-          container.remove()
-        })
+      UI.toggleInfoForResult(currentResult, 'images', function(container, details){
+        var images = details.images || []
 
-      } else {
-        var container = $('<div class="images" style="display:none">')
-        currentResult.after(container)
+        if (!images.length) {
+          container.text('No images')
+        } else {
+          images.forEach(function(src){
+            var img = $('<img>')
+            img.appendTo(container)
 
-        CL.getDetailsForResult(currentResult, function(details){
-          var images = details.images || []
+            // remove small/broken images
+            img.load(function(){
+              w = img.width(),
+              h = img.height()
 
-          if (!images.length) {
-            container.text('No images')
-          } else {
-            images.forEach(function(src){
-              container.append('<img src="'+src+'">')
+              if (w+h && (w < 125 || h < 125 || w/h > 1.8 || h/w > 1.8)) {
+                img.remove()
+              }
             })
-          }
-
-          container.slideDown('fast')
-        })
-      }
+            img.error(function(){
+              img.remove()
+            })
+            img.attr('src', src)
+          })
+        }
+      })
+    },
+    // maps
+    'm' : function(){
+      UI.toggleInfoForResult(currentResult, 'maps', function(container, details){
+        var addr = details.address
+        if (!addr) {
+          container.text('No maps')
+        } else {
+          [11, 15].forEach(function(zoom){
+            var src = 'http://maps.google.com/maps/api/staticmap?size=350x200&sensor=false&markers=color:red|' + addr + '&center=' + addr + '&zoom=' + zoom;
+            container.append('<img src="'+src+'">')
+          })
+        }
+      })
     }
   }
   hotkeys['up'] = hotkeys['k']
