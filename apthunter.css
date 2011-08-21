@@ -1,0 +1,10 @@
+p.ignored {
+  opacity: 0.2;
+}
+p.starred {
+  background-color: yellow;
+}
+p.current {
+  outline: 1px dashed gray;
+  outline-offset: 7px;
+}
