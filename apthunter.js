@@ -38,9 +38,10 @@ var CL = {
   },
   getCurrentResult: function(){
     var curr = store.get('current')
-    if (curr)
-      return $('p a[href*="'+store.get('current')+'.html"]').parent('p')
-    else
+    if (curr) {
+      var link = $('p a[href*="'+store.get('current')+'.html"]')
+      return link.length ? link.parent('p') : null
+    } else
       return null
   },
   getTagsForResult: function(result){
