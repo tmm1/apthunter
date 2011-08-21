@@ -13,14 +13,23 @@ var CL = {
     return (store.get('starred') || []).indexOf(this.resultToId(result)) > -1
   },
   saveResult: function(result){
-    if (result.hasClass('ignored')) {
-      var ignored = (store.get('ignored') || [])
-      ignored.push(this.resultToId(result))
-      store.set('ignored', ignored)
+    var result_id = this.resultToId(result)
 
-    } else if (result.hasClass('starred')) {
-      var starred = (store.get('starred') || [])
+    var ignored = (store.get('ignored') || []).unique()
+    if (result.hasClass('ignored')) {
+      ignored.push(result_id)
+      store.set('ignored', ignored)
+    } else if (ignored.indexOf(result_id) > -1) {
+      delete ignored[ ignored.indexOf(result_id) ]
+      store.set('ignored', ignored)
+    }
+
+    var starred = (store.get('starred') || []).unique()
+    if (result.hasClass('starred')) {
       starred.push(this.resultToId(result))
+      store.set('starred', starred)
+    } else if (starred.indexOf(result_id) > -1) {
+      delete starred[ starred.indexOf(result_id) ]
       store.set('starred', starred)
     }
   },
@@ -68,7 +77,10 @@ var CL = {
     }
   },
   resultToId: function(result){
-    return result.find('a').attr('href').match(/(\d+)\.html$/)[1]
+    if (typeof result == 'number' || typeof result == 'string')
+      return result
+    else
+      return result.find('a').attr('href').match(/(\d+)\.html$/)[1]
   }
 }
 
@@ -87,15 +99,18 @@ var UI = {
     }
   },
   toggleInfoForResult: function(result, type, cb){
-    if (currentResult.next('div.'+type).length) {
-      var container = currentResult.next('div.'+type)
+    var result_id = CL.resultToId(result),
+        container_id = 'info-' + result_id + '-' + type
+
+    var container = $('#'+container_id)
+    if (container.length) {
       container.slideUp('fast', function(){
         container.remove()
       })
 
     } else {
-      var container = $('<div class="'+type+'" style="display:none">')
-      currentResult.after(container)
+      var container = $('<div id="'+container_id+'" class="'+type+'" style="display:none">')
+      currentResult.append(container)
 
       CL.getDetailsForResult(currentResult, function(details){
         cb(container, details)
@@ -107,6 +122,7 @@ var UI = {
 
 // on apartment detail pages
 if (document.location.pathname.match(/apa\/\d+\.html$/)) {
+
   var result_id = document.location.pathname.match(/apa\/(\d+)\.html/)[1]
 
   var mailto = $('a[href*="mailto"]'),
@@ -122,6 +138,16 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
   }
 
   CL.addToCache(result_id, details)
+
+  $.hotkeys({
+    // edit tags
+    't': function(){
+      var oldTags = CL.getTagsForResult(result_id)
+      var tags = prompt('Enter comma separated tags: ', oldTags)
+      CL.setTagsForResult(result_id, tags)
+    },
+  })
+
 }
 
 // on apartment search result pages
@@ -235,7 +261,7 @@ if (document.location.pathname.match(/search\/apa\//)) {
           container.text('No maps')
         } else {
           [11, 15].forEach(function(zoom){
-            var src = 'http://maps.google.com/maps/api/staticmap?size=350x200&sensor=false&markers=color:red|' + addr + '&center=' + addr + '&zoom=' + zoom;
+            var src = 'http://maps.google.com/maps/api/staticmap?size=350x100&sensor=false&markers=color:red|' + addr + '&center=' + addr + '&zoom=' + zoom;
             container.append('<img src="'+src+'">')
           })
         }
