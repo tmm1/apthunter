@@ -12,11 +12,11 @@ var CL = {
   isStarred: function(result){
     return (store.get('starred') || []).indexOf(this.resultToId(result)) > -1
   },
-  saveResult: function(result){
+  saveResult: function(result, is_ignored, is_starred){
     var result_id = this.resultToId(result)
 
     var ignored = (store.get('ignored') || []).unique()
-    if (result.hasClass('ignored')) {
+    if (is_ignored) {
       ignored.push(result_id)
       store.set('ignored', ignored)
     } else if (ignored.indexOf(result_id) > -1) {
@@ -25,7 +25,7 @@ var CL = {
     }
 
     var starred = (store.get('starred') || []).unique()
-    if (result.hasClass('starred')) {
+    if (is_starred) {
       starred.push(this.resultToId(result))
       store.set('starred', starred)
     } else if (starred.indexOf(result_id) > -1) {
@@ -82,8 +82,14 @@ var CL = {
   resultToId: function(result){
     if (typeof result == 'number' || typeof result == 'string')
       return result
-    else
-      return result.find('a').attr('href').match(/(\d+)\.html$/)[1]
+    else {
+      var link = result.find('a'), url
+      if (link.length)
+        url = link.attr('href')
+      else
+        url = document.location.pathname
+      return url.match(/\/(\d+)\.html$/)[1]
+    }
   }
 }
 
@@ -146,6 +152,7 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
   }
 
   CL.addToCache(result_id, details)
+  UI.annotateResult($('h2'))
 
   $.hotkeys({
     // edit tags
@@ -153,6 +160,23 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
       var oldTags = CL.getTagsForResult(result_id)
       var tags = prompt('Enter comma separated tags: ', oldTags)
       CL.setTagsForResult(result_id, tags)
+      UI.annotateResult($('h2'))
+    },
+    // ignore
+    'i': function(){
+      var currentResult = $('h2')
+      currentResult.removeClass('starred')
+      currentResult.toggleClass('ignored')
+      CL.saveResult(currentResult, currentResult.hasClass('ignored'), currentResult.hasClass('starred'))
+      UI.annotateResult(currentResult)
+    },
+    // star
+    's': function(){
+      var currentResult = $('h2')
+      currentResult.removeClass('ignored')
+      currentResult.toggleClass('starred')
+      CL.saveResult(currentResult, currentResult.hasClass('ignored'), currentResult.hasClass('starred'))
+      UI.annotateResult(currentResult)
     },
   })
 
@@ -213,13 +237,13 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
     'i': function(){
       currentResult.removeClass('starred')
       currentResult.toggleClass('ignored')
-      CL.saveResult(currentResult)
+      CL.saveResult(currentResult, currentResult.hasClass('ignored'), currentResult.hasClass('starred'))
     },
     // star
     's': function(){
       currentResult.removeClass('ignored')
       currentResult.toggleClass('starred')
-      CL.saveResult(currentResult)
+      CL.saveResult(currentResult, currentResult.hasClass('ignored'), currentResult.hasClass('starred'))
     },
     // open
     'o': function(){

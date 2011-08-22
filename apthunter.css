@@ -1,7 +1,7 @@
-p.ignored {
+.ignored {
   opacity: 0.25;
 }
-p.starred {
+.starred {
   background-color: #fff5d0;
 }
 p.current {
