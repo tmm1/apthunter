@@ -105,15 +105,20 @@ var UI = {
 
     var container = $('#'+container_id)
     if (container.length) {
+      $('#spinner_'+container_id).remove()
       container.slideUp('fast', function(){
         container.remove()
       })
 
     } else {
       var container = $('<div id="'+container_id+'" class="'+type+'" style="display:none">')
+      var spinner = $('<div id="spinner_'+container_id+'" class="spinner"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><div class="bar4"></div><div class="bar5"></div><div class="bar6"></div><div class="bar7"></div><div class="bar8"></div><div class="bar9"></div><div class="bar10"></div><div class="bar11"></div><div class="bar12"></div></div>')
+
+      currentResult.append(spinner)
       currentResult.append(container)
 
       CL.getDetailsForResult(currentResult, function(details){
+        spinner.remove()
         cb(container, details)
         container.slideDown('fast')
       })
@@ -228,11 +233,10 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
     // photos
     'p': function(){
       UI.toggleInfoForResult(currentResult, 'images', function(container, details){
-        var images = details.images || []
-
-        if (!images.length) {
+        if (!details || !details.images || !details.images.length) {
           container.text('No images')
         } else {
+          var images = details.images || []
           images.forEach(function(src){
             var img = $('<img>')
             img.appendTo(container)
@@ -255,18 +259,23 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
       })
     },
     // maps
-    'm' : function(){
+    'm': function(){
       UI.toggleInfoForResult(currentResult, 'maps', function(container, details){
-        var addr = details.address
-        if (!addr) {
+        if (!details || !details.address) {
           container.text('No maps')
         } else {
+          var addr = details.address
           [11, 15].forEach(function(zoom){
             var src = 'http://maps.google.com/maps/api/staticmap?size=350x100&sensor=false&markers=color:red|' + addr + '&center=' + addr + '&zoom=' + zoom;
             container.append('<img src="'+src+'">')
           })
         }
       })
+    },
+    // clear cache
+    'c': function(){
+      localStorage.removeItem('cache')
+      alert('cache cleared!')
     }
   }
   hotkeys['up'] = hotkeys['k']

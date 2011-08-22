@@ -6,7 +6,7 @@
     "all_frames": true,
     "run_at": "document_end",
     "matches": ["http://*.craigslist.org/*"],
-    "css": ["apthunter.css"],
+    "css": ["apthunter.css", "vendor/spinner.css"],
     "js":  ["vendor/store.js", "vendor/jquery-1.4.2.js", "vendor/jquery.hotkeys.js", "apthunter.js"]
   }],
   "permissions": [
