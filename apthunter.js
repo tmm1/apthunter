@@ -178,6 +178,23 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
       CL.saveResult(currentResult, currentResult.hasClass('ignored'), currentResult.hasClass('starred'))
       UI.annotateResult(currentResult)
     },
+    // maps
+    'm': function(){
+      if ($('#inline_maps').length) {
+        $('#inline_maps').remove()
+        return
+      }
+
+      if (details.address) {
+        var addr = details.address
+        var container = $('<div id="inline_maps">').appendTo('#userbody small:last')
+        var zoomLevels = [11, 15]
+        zoomLevels.forEach(function(zoom){
+          var src = 'http://maps.google.com/maps/api/staticmap?size=350x100&sensor=false&markers=color:red|' + addr + '&center=' + addr + '&zoom=' + zoom;
+          container.append('<img src="'+src+'">')
+        })
+      }
+    }
   })
 
 }
