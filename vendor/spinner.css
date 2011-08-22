@@ -2,8 +2,8 @@
 
 div.spinner {
   position: relative;
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   display: inline-block;
   vertical-align: middle;
 }

@@ -70,9 +70,11 @@ var CL = {
       var self = this
       iframe.attr('src', result.find('a').attr('href'))
       iframe[0].onload = function(){
-        entry = self.getFromCache(self.resultToId(result))
-        cb(entry)
-        iframe.remove()
+        setTimeout(function(){
+          entry = self.getFromCache(self.resultToId(result))
+          cb(entry)
+          iframe.remove()
+        }, 600) // wait for content script in iframe to fire
       }
       iframe.appendTo('body')
     }
@@ -265,7 +267,8 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
           container.text('No maps')
         } else {
           var addr = details.address
-          [11, 15].forEach(function(zoom){
+          var zoomLevels = [11, 15]
+          zoomLevels.forEach(function(zoom){
             var src = 'http://maps.google.com/maps/api/staticmap?size=350x100&sensor=false&markers=color:red|' + addr + '&center=' + addr + '&zoom=' + zoom;
             container.append('<img src="'+src+'">')
           })
