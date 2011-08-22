@@ -18,7 +18,8 @@
 * `p` to toggle inline photos
 * `t` to edit tags/notes for result
 * `o` to navigate to result page
+* `c` to clear the inline cache
 
 ## padmapper?
 
-yes, i know about padmapper. it's a great tool. [use it](http://padmapper.com).
+yes, i know about padmapper. it's a great service. [use it](http://padmapper.com).
