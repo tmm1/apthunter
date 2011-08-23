@@ -154,7 +154,7 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
   CL.addToCache(result_id, details)
   UI.annotateResult($('h2'))
 
-  $.hotkeys({
+  var hotkeys = {
     // edit tags
     't': function(){
       var oldTags = CL.getTagsForResult(result_id)
@@ -194,8 +194,14 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
           container.append('<img src="'+src+'">')
         })
       }
+    },
+    // go back
+    'left': function(){
+      window.history.back()
     }
-  })
+  }
+  hotkeys['o'] = hotkeys['left']
+  $.hotkeys(hotkeys)
 
 }
 
@@ -324,6 +330,7 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
   }
   hotkeys['up'] = hotkeys['k']
   hotkeys['down'] = hotkeys['j']
+  hotkeys['right'] = hotkeys['o']
   $.hotkeys(hotkeys)
 
   // annotate results using saved data
