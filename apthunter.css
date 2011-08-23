@@ -25,3 +25,43 @@ div.images, div.maps {
 div.images img {
   vertical-align: middle;
 }
+
+#help {
+  position: absolute;
+  display: -webkit-box;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  background-color: rgba(0,0,0,0.7);
+}
+#help > .content {
+  display: -webkit-box;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  -webkit-border-radius: 5px;
+  padding: 1em;
+  background: black;
+  /* -webkit-box-shadow: 1px 1px 1px #888;*/
+  color: white;
+  opacity: 1.0;
+}
+#help > .content ul {
+  margin: 6px;
+  padding: 0;
+  font-family: monospace;
+}
+#help > .content li {
+  list-style-type: none;
+  padding: 4px;
+}
+#help > .content tt {
+  border-radius: 4px;
+  display: inline-block;
+  background: white;
+  padding: 4px;
+  color: black;
+  font-weight: bold;
+}

@@ -134,6 +134,9 @@ var UI = {
   }
 }
 
+// help
+$('<div style="display:none" id="help"><div class="content"></div></div>').appendTo('body')
+
 // on apartment detail pages
 if (document.location.pathname.match(/apa\/\d+\.html$/)) {
 
@@ -198,11 +201,28 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
     // go back
     'left': function(){
       window.history.back()
+    },
+    // help
+    '?': function(){
+      $('#help').toggle().css('top', $(window).scrollTop())
+    },
+    // escape help dialog
+    'esc': function(){
+      $('#help').hide()
     }
   }
   hotkeys['o'] = hotkeys['left']
   hotkeys['h'] = hotkeys['left']
   $.hotkeys(hotkeys)
+
+  var nav = $('<ul>').appendTo('#help .content')
+  nav.append('<li><tt>h</tt> or <tt>left</tt> to go back to search listings</li>')
+
+  var keys = $('<ul>').appendTo('#help .content')
+  keys.append('<li><tt>s</tt> to star this result</li>')
+  keys.append('<li><tt>i</tt> to ignore this result</li>')
+  keys.append('<li><tt>t</tt> to edit tags/notes for this result</li>')
+  keys.append('<li><tt>m</tt> to toggle inline maps</li>')
 
 }
 
@@ -327,6 +347,14 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
     'c': function(){
       localStorage.removeItem('cache')
       alert('cache cleared!')
+    },
+    // help
+    '?': function(){
+      $('#help').toggle().css('top', $(window).scrollTop())
+    },
+    // escape help dialog
+    'esc': function(){
+      $('#help').hide()
     }
   }
   hotkeys['up'] = hotkeys['k']
@@ -334,6 +362,18 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
   hotkeys['right'] = hotkeys['o']
   hotkeys['l'] = hotkeys['right']
   $.hotkeys(hotkeys)
+
+  var nav = $('<ul>').appendTo('#help .content')
+  nav.append('<li><tt>j</tt> or <tt>down</tt> to move to next result</li>')
+  nav.append('<li><tt>k</tt> or <tt>up</tt> to move to previous result </li>')
+  nav.append('<li><tt>l</tt> or <tt>right</tt> to navigate to current result</li>')
+
+  var keys = $('<ul>').appendTo('#help .content')
+  keys.append('<li><tt>s</tt> to star current result</li>')
+  keys.append('<li><tt>i</tt> to ignore current result</li>')
+  keys.append('<li><tt>t</tt> to edit tags/notes for current result</li>')
+  keys.append('<li><tt>m</tt> to toggle inline maps</li>')
+  keys.append('<li><tt>p</tt> to toggle inline photos</li>')
 
   // annotate results using saved data
   results.each(function(){
@@ -345,4 +385,5 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
   $('p').click(function(){
     updateCurrentResult($(this))
   })
+
 }

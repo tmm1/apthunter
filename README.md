@@ -10,6 +10,8 @@
 
 ## keyboard bindings
 
+* `?` for help on a search results or detail page
+
 * `k` or `up` to select previous result
 * `j` or `down` to select next result
 * `i` to ignore current result (reduce opacity)
