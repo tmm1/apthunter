@@ -10,17 +10,27 @@
 
 ## keyboard bindings
 
-* `?` for help on a search results or detail page
+* `?` for help
+
+### on a search results page
 
 * `k` or `up` to select previous result
 * `j` or `down` to select next result
+* `l` or `right` to navigate to result page
 * `i` to ignore current result (reduce opacity)
 * `s` to star the current result (bgcolor highlight)
 * `m` to toggle inline google map for location
 * `p` to toggle inline photos
 * `t` to edit tags/notes for result
-* `o` to navigate to result page
 * `c` to clear the inline cache
+
+### on an apt detail page
+
+* `h` or `left` to go back to the search results
+* `i` to ignore result
+* `s` to star the result
+* `m` to toggle google maps
+* `t` to edit tags/notes
 
 ## padmapper?
 
