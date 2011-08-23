@@ -201,6 +201,7 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
     }
   }
   hotkeys['o'] = hotkeys['left']
+  hotkeys['h'] = hotkeys['left']
   $.hotkeys(hotkeys)
 
 }
@@ -295,7 +296,7 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
               w = img.width(),
               h = img.height()
 
-              if (w+h && (w < 125 || h < 125 || w/h > 1.8 || h/w > 1.8)) {
+              if (w+h && (w < 120 || h < 120 || w/h > 1.8 || h/w > 1.8)) {
                 img.remove()
               }
             })
@@ -331,6 +332,7 @@ if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
   hotkeys['up'] = hotkeys['k']
   hotkeys['down'] = hotkeys['j']
   hotkeys['right'] = hotkeys['o']
+  hotkeys['l'] = hotkeys['right']
   $.hotkeys(hotkeys)
 
   // annotate results using saved data

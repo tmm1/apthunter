@@ -15,7 +15,7 @@ p.current.ignored {
 span.tags {
   color: green;
   font-size: smaller;
-  padding-left: 5px;
+  padding: 0 4px 0 4px;
 }
 div.images, div.maps {
   text-align: center;
