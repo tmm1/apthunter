@@ -101,6 +101,12 @@ var UI = {
     if (!tags.length) tags = $('<span class="tags">').appendTo(result)
     tags.text( tagStore[CL.resultToId(result)] )
 
+    // some pages have a <br>, not sure why.
+    if (result.find('br.c').length) {
+      var br = result.find('br.c')
+      br.remove()
+    }
+
     if (CL.isIgnored(result)) {
       result.addClass('ignored')
     } else if (CL.isStarred(result)) {
@@ -137,10 +143,10 @@ var UI = {
 // help
 $('<div style="display:none" id="help"><div class="content"></div></div>').appendTo('body')
 
-// on apartment detail pages
-if (document.location.pathname.match(/apa\/\d+\.html$/)) {
+// on detail pages
+if (document.location.pathname.match(/\/\d+\.html$/)) {
 
-  var result_id = document.location.pathname.match(/apa\/(\d+)\.html/)[1]
+  var result_id = document.location.pathname.match(/\/(\d+)\.html$/)[1]
 
   var mailto = $('a[href*="mailto"]'),
       maps = $('a:contains("google map")'),
@@ -226,8 +232,8 @@ if (document.location.pathname.match(/apa\/\d+\.html$/)) {
 
 }
 
-// on apartment search result or listing pages
-if (document.location.pathname.match(/(search\/apa\/|\/apa\/$)/)) {
+// on search result or listing pages
+if ($('h4.ban').length) {
 
   // find results
   var results = $('h4.ban ~ p')
