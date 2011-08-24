@@ -1,5 +1,16 @@
 # apthunter
 
+a greasemonkey-style chrome extension for craigslist.org
+
+adds keyboard bindings to:
+
+* navigate results (up/down/left/right or h/j/k/l)
+* highlight/ignore results
+* add notes/tags to results
+* show images/maps inline
+
+originally developed for apartment listings, but works on any craigslist list/search or detail page.
+
 ## before
 
 ![](http://f.cl.ly/items/3U2d0V1R2D1J3f0e0A2J/Screen%20shot%202011-08-21%20at%201.25.07%20AM.png)
@@ -35,3 +46,13 @@
 ## padmapper?
 
 yes, i know about padmapper. it's a great service. [use it](http://padmapper.com).
+
+## installation
+
+* `git clone git://github.com/tmm1/apthunter`
+* navigate to [`chrome://extensions`](chrome://extensions/)
+* click `Developer mode`
+* click `Load unpacked extension...`
+* navigate to your checkout and click `Select`
+* go to [a craigslist listing page](http://sfbay.craigslist.org/sfc/apa/)
+* hit `?`
