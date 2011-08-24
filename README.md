@@ -19,6 +19,16 @@ originally developed for apartment listings, but works on any craigslist list/se
 
 ![](http://f.cl.ly/items/350j0z3W40033U3l0U0B/Screen%20shot%202011-08-21%20at%201.12.22%20AM.png)
 
+## installation
+
+* `git clone git://github.com/tmm1/apthunter`
+* navigate to [`chrome://extensions`](chrome://extensions/)
+* click `Developer mode`
+* click `Load unpacked extension...`
+* navigate to your checkout and click `Select`
+* go to [a craigslist listing page](http://sfbay.craigslist.org/sfc/apa/)
+* hit `?`
+
 ## keyboard bindings
 
 * `?` for help
@@ -46,13 +56,3 @@ originally developed for apartment listings, but works on any craigslist list/se
 ## padmapper?
 
 yes, i know about padmapper. it's a great service. [use it](http://padmapper.com).
-
-## installation
-
-* `git clone git://github.com/tmm1/apthunter`
-* navigate to [`chrome://extensions`](chrome://extensions/)
-* click `Developer mode`
-* click `Load unpacked extension...`
-* navigate to your checkout and click `Select`
-* go to [a craigslist listing page](http://sfbay.craigslist.org/sfc/apa/)
-* hit `?`
