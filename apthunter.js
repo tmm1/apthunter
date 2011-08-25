@@ -20,7 +20,7 @@ var CL = {
       ignored.push(result_id)
       store.set('ignored', ignored)
     } else if (ignored.indexOf(result_id) > -1) {
-      delete ignored[ ignored.indexOf(result_id) ]
+      ignored.splice( ignored.indexOf(result_id), 1 )
       store.set('ignored', ignored)
     }
 
@@ -29,7 +29,7 @@ var CL = {
       starred.push(this.resultToId(result))
       store.set('starred', starred)
     } else if (starred.indexOf(result_id) > -1) {
-      delete starred[ starred.indexOf(result_id) ]
+      starred.splice( starred.indexOf(result_id), 1 )
       store.set('starred', starred)
     }
   },
@@ -351,7 +351,7 @@ if ($('h4.ban').length) {
     },
     // clear cache
     'c': function(){
-      localStorage.removeItem('cache')
+      store.remove('cache')
       alert('cache cleared!')
     },
     // help
