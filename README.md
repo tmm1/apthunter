@@ -52,3 +52,8 @@ originally developed for apartment listings, but works on any craigslist list/se
 ## padmapper?
 
 yes, i know about padmapper. it's a great service. [use it](http://padmapper.com).
+
+## other useful tools
+
+* [mailto: for chrome](https://chrome.google.com/webstore/detail/dgkkmcknielgdhebimdnfahpipajcpjn) for responding to craigslist postings via gmail
+
