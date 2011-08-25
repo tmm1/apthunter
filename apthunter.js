@@ -234,7 +234,7 @@ if (document.location.pathname.match(/\/\d+\.html$/)) {
 if ($('h4.ban').length) {
 
   // find results
-  var results = $('h4.ban ~ p')
+  var results = $('h4.ban ~ p').not(':contains("next")')
   console.log(results.length + ' results')
 
   // highlight current result
