@@ -13,7 +13,7 @@
     "run_at": "document_end",
     "matches": ["http://*.craigslist.org/*"],
     "css": ["apthunter.css", "vendor/spinner.css"],
-    "js":  ["vendor/store.js", "vendor/jquery-1.4.2.js", "vendor/jquery.hotkeys.js", "apthunter.js"]
+    "js":  ["vendor/core_ext.js", "vendor/store.js", "vendor/jquery-1.4.2.js", "vendor/jquery.hotkeys.js", "apthunter.js"]
   }],
   "browser_action": {
     "default_icon": "craigslist.ico",
