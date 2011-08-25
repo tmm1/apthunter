@@ -1,10 +1,12 @@
 {
-  "name": "craigslist apthunter",
+  "name": "craigslist+",
   "icons": {
-    "16": "craigslist.ico"
+    "16": "craigslist.ico",
+    "48": "craigslist_48.png",
+    "128": "craigslist_128.png"
   },
-  "version": "1.0",
-  "description": "Adds keyboard navigation, stars, notes and inline images/maps to craigslist apartment listings",
+  "version": "1.1",
+  "description": "Adds keyboard navigation, stars, notes, inline images/maps and search monitoring to craigslist",
   "background_page": "background.html",
   "content_scripts": [{
     "all_frames": true,
