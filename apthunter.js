@@ -143,6 +143,11 @@ var UI = {
 // help
 $('<div style="display:none" id="help"><div class="content"></div></div>').appendTo('body')
 
+// on search pages
+if (document.location.pathname.match(/search/)) {
+  chrome.extension.sendRequest({type:'search_page'})
+}
+
 // on detail pages
 if (document.location.pathname.match(/\/\d+\.html$/)) {
 

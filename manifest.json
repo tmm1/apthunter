@@ -1,7 +1,11 @@
 {
   "name": "craigslist apthunter",
+  "icons": {
+    "16": "craigslist.ico"
+  },
   "version": "1.0",
   "description": "Adds keyboard navigation, stars, notes and inline images/maps to craigslist apartment listings",
+  "background_page": "background.html",
   "content_scripts": [{
     "all_frames": true,
     "run_at": "document_end",
@@ -9,7 +13,13 @@
     "css": ["apthunter.css", "vendor/spinner.css"],
     "js":  ["vendor/store.js", "vendor/jquery-1.4.2.js", "vendor/jquery.hotkeys.js", "apthunter.js"]
   }],
+  "browser_action": {
+    "default_icon": "craigslist.ico",
+    "default_title": "View saved searches and results",
+    "default_popup": "popup.html"
+  },
   "permissions": [
-    "tabs"
+    "tabs",
+    "notifications"
   ]
 }

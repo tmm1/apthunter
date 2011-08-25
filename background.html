@@ -1,0 +1,124 @@
+<script src="vendor/store.js"></script>
+<script src="vendor/jquery-1.4.2.js"></script>
+<script>
+
+  var Watcher = {
+    urls: function(){
+      return store.get('urls') || []
+    },
+    hasUrl: function(url){
+      if (!url.match(/.*craigslist.org.*\/search\//))
+        return null
+      return (this.urls()).indexOf(url) > -1
+    },
+    addUrl: function(url){
+      var urls = store.get('urls') || []
+      if (urls.indexOf(url) == -1)
+        urls.push(url)
+      store.set('urls', urls)
+    },
+    removeUrl: function(url){
+      var found = false
+
+      var urls = store.get('urls') || []
+      if (urls.indexOf(url) > -1) {
+        found = true
+        urls.splice( urls.indexOf(url), 1 )
+      }
+      store.set('urls', urls)
+
+      var watches = store.get('watches') || {}
+      delete watches[ url ]
+      store.set('watches', watches)
+
+      return found
+    },
+    checkUrl: function(url, cb){
+      var watches = store.get('watches') || {}
+
+      var watch = watches[url] || {}
+      watch.numUnread = Math.round(Math.random()*2)
+
+      cb(watch)
+      watches[url] = watch
+      store.set('watches', watches)
+    },
+    numUnread: function(){
+      var watches = store.get('watches') || {}
+      var num = 0
+      this.urls().forEach(function(url){
+        num += (watches[url] || {}).numUnread || 0
+      })
+      return num
+    }
+  }
+
+  var updateTabAction = function(tab){
+    var url = tab.url
+    var saveable = Watcher.hasUrl(url) != null
+
+    if (saveable) {
+      var saved = Watcher.hasUrl(url) == true
+
+      chrome.browserAction.setPopup({
+        tabId: tab.id,
+        popup: ''
+      })
+      chrome.browserAction.setTitle({
+        tabId: tab.id,
+        title: saved ? 'Stop watching this page' : 'Watch this page for new listings'
+      })
+      chrome.browserAction.setBadgeBackgroundColor({
+        tabId: tab.id,
+        color: saved ? [255,0,0,225] : [0,255,0,225]
+      })
+      chrome.browserAction.setBadgeText({
+        tabId: tab.id,
+        text: saved ? '--' : '+'
+      })
+    }
+  }
+
+  chrome.browserAction.onClicked.addListener(function(tab){
+    var url = tab.url
+    if (Watcher.hasUrl(url) == false) {
+      Watcher.addUrl(url)
+    } else if (Watcher.hasUrl(url) == true) {
+      Watcher.removeUrl(url)
+    }
+    updateTabAction(tab)
+  })
+
+  chrome.extension.onRequest.addListener(
+    function(request, sender, sendResponse) {
+      console.log(sender.tab ?  "from a content script:" + sender.tab.url : "from the extension")
+
+      if (request.type == "search_page") {
+        if (sender.tab)
+          updateTabAction(sender.tab)
+        sendResponse({})
+      } else
+        sendResponse({})
+    }
+  )
+
+  var checkWatchers = function(){
+    var urls = Watcher.urls()
+    var num_left = urls.length
+
+    urls.forEach(function(url){
+      Watcher.checkUrl(url, function(watch){
+        var num = Watcher.numUnread()
+        chrome.browserAction.setBadgeText({text: num ? (''+num) : ''})
+        chrome.browserAction.setBadgeBackgroundColor({color: [255,0,0,155]})
+
+        num_left -= 1
+        if (num_left == 0) {
+          setTimeout(function(){ checkWatchers() }, 2*60*1000)
+        }
+      })
+    })
+  }
+  checkWatchers()
+
+</script>
