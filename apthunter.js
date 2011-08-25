@@ -59,17 +59,11 @@ var CL = {
     if (entry) {
       cb(entry)
     } else {
-      var iframe = $('<iframe style="display:none">')
       var self = this
-      iframe.attr('src', result.find('a').attr('href'))
-      iframe[0].onload = function(){
-        setTimeout(function(){
-          entry = self.getFromCache(self.resultToId(result))
-          cb(entry)
-          iframe.remove()
-        }, 600) // wait for content script in iframe to fire
-      }
-      iframe.appendTo('body')
+      chrome.extension.sendRequest({type:'fetch', url:result.find('a').attr('href')}, function(response){
+        self.addToCache(self.resultToId(result), response)
+        cb(response)
+      })
     }
   },
   resultToId: function(result){
@@ -146,19 +140,6 @@ if (document.location.pathname.match(/\/\d+\.html$/)) {
 
   var result_id = document.location.pathname.match(/\/(\d+)\.html$/)[1]
 
-  var mailto = $('a[href*="mailto"]'),
-      maps = $('a:contains("google map")'),
-      srcs = $('img').map(function(){ return this.src }),
-      images = $.makeArray(srcs).unique()
-
-  var details = {
-    title: $('h2').text(),
-    email: mailto.length ? mailto[0].href : null,
-    address: maps.length ? decodeURIComponent(maps[0].href.match(/q=(.*)$/)[1]) : null,
-    images: images
-  }
-
-  CL.addToCache(result_id, details)
   UI.annotateResult($('h2'))
 
   var hotkeys = {

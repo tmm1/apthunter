@@ -22,6 +22,9 @@
   },
   "permissions": [
     "tabs",
-    "notifications"
+    "notifications",
+    "http://sfbay.craigslist.org/",
+    "http://*.craigslist.org/",
+    "http://craigslist.org/"
   ]
 }

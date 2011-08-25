@@ -37,12 +37,34 @@
     checkUrl: function(url, cb){
       var watches = store.get('watches') || {}
 
-      var watch = watches[url] || {}
-      watch.numUnread = Math.round(Math.random()*2)
+      this.fetch(url, function(response) {
+        var links = response.links
+        var latestSeen = 0
 
-      cb(watch)
-      watches[url] = watch
-      store.set('watches', watches)
+        if (links && links.length) {
+          latestSeen = links[0].match(/(\d+)\.html$/)[1]
+        }
+
+        var watch = watches[url] || {}
+        watch.latestSeen = latestSeen
+        watch.lastUpdated = new Date().getTime()
+
+        if (!watch.latestRead) {
+          watch.latestRead = latestSeen
+          watch.numUnread = 0
+        } else {
+          watch.numUnread = 0
+          for(var i=0; i<links.length; i++) {
+            var id = links[i].match(/(\d+)\.html$/)[1]
+            if (id <= watch.latestRead) break
+            watch.numUnread += 1
+          }
+        }
+
+        cb(watch)
+        watches[url] = watch
+        store.set('watches', watches)
+      })
     },
     numUnread: function(){
       var watches = store.get('watches') || {}
@@ -51,6 +73,42 @@
         num += (watches[url] || {}).numUnread || 0
       })
       return num
+    },
+    fetch: function(url, cb){
+      $.ajax({
+        url: url,
+        cache: false,
+        success: function(data){
+          var doc = $('<div>').append(data), result = {}
+
+          /* result page */
+          if (url.match(/\d+\.html$/)) {
+            var mailto = doc.find('a[href*="mailto"]'),
+                maps = doc.find('a:contains("google map")'),
+                srcs = doc.find('img').map(function(){ return this.src }),
+                images = $.makeArray(srcs).unique()
+
+            result = {
+              title: doc.find('h2').text(),
+              email: mailto.length ? mailto[0].href : null,
+              address: maps.length ? decodeURIComponent(maps[0].href.match(/q=(.*)$/)[1]) : null,
+              images: images
+            }
+
+          /* listing page */
+          } else {
+            var results = doc.find('p'),
+                hrefs = results.find('a').map(function(){ return this.href }),
+                links = $.makeArray(hrefs).unique()
+
+            result = {
+              links: links
+            }
+          }
+
+          cb(result)
+        }
+      })
     }
   }
 
@@ -98,8 +156,13 @@
         if (sender.tab)
           updateTabAction(sender.tab)
         sendResponse({})
-      } else
+      } else if (request.type == "fetch") {
+        Watcher.fetch(request.url, function(result){
+          sendResponse(result)
+        })
+      } else {
         sendResponse({})
+      }
     }
   )
 
