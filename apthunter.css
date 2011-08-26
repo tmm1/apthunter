@@ -65,3 +65,8 @@ div.images img {
   color: black;
   font-weight: bold;
 }
+
+/* neighborhood selector popup above page */
+#nh {
+  z-index: 10;
+}

@@ -173,8 +173,9 @@ if (document.location.pathname.match(/\/\d+\.html$/)) {
         return
       }
 
-      if (details.address) {
-        var addr = details.address
+      var maps = $('a:contains("google map")')
+      if (maps.length) {
+        var addr = decodeURIComponent(maps[0].href.match(/q=(.*)$/)[1])
         var container = $('<div id="inline_maps">').appendTo('#userbody small:last')
         var zoomLevels = [11, 15]
         zoomLevels.forEach(function(zoom){

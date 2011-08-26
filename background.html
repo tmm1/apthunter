@@ -35,8 +35,6 @@
       return found
     },
     checkUrl: function(url, cb){
-      var watches = store.get('watches') || {}
-
       this.fetch(url, function(response) {
         var links = response.links
         var latestSeen = 0
@@ -45,6 +43,7 @@
           latestSeen = links[0].match(/(\d+)\.html$/)[1]
         }
 
+        var watches = store.get('watches') || {}
         var watch = watches[url] || {}
         watch.latestSeen = latestSeen
         watch.lastUpdated = new Date().getTime()
@@ -54,16 +53,21 @@
           watch.numUnread = 0
         } else {
           watch.numUnread = 0
+          var num_older = 0
           for(var i=0; i<links.length; i++) {
             var id = links[i].match(/(\d+)\.html$/)[1]
-            if (id <= watch.latestRead) break
+            if (id <= watch.latestRead) {
+              if (id == watch.latestRead) break
+              num_older += 1
+              if (num_older > 2) break
+            }
             watch.numUnread += 1
           }
         }
-
-        cb(watch)
         watches[url] = watch
         store.set('watches', watches)
+
+        cb(watch)
       })
     },
     numUnread: function(){
@@ -75,11 +79,16 @@
       return num
     },
     fetch: function(url, cb){
+      console.log('fetching', url)
       $.ajax({
         url: url,
-        cache: false,
+        cache: url.match(/\d+\.html$/) ? true : false,
+        error: function(e){
+          console.log('error', url, e)
+        },
         success: function(data){
-          var doc = $('<div>').append(data), result = {}
+          console.log('fetched', url, data.length)
+          var doc = $('<div>').append($(data).not('script')), result = {}
 
           /* result page */
           if (url.match(/\d+\.html$/)) {
@@ -166,19 +175,23 @@
     }
   )
 
+  var checkWatcherTimeout = null
   var checkWatchers = function(){
     var urls = Watcher.urls()
     var num_left = urls.length
 
     urls.forEach(function(url){
       Watcher.checkUrl(url, function(watch){
-        var num = Watcher.numUnread()
-        chrome.browserAction.setBadgeText({text: num ? (''+num) : ''})
-        chrome.browserAction.setBadgeBackgroundColor({color: [255,0,0,155]})
-
+        console.log('got', watch)
         num_left -= 1
-        if (num_left == 0) {
-          setTimeout(function(){ checkWatchers() }, 5*60*1000)
+
+        var num = Watcher.numUnread()
+        chrome.browserAction.setBadgeBackgroundColor({color: [255,0,0,155]})
+        chrome.browserAction.setBadgeText({text: num ? (''+num) : ''})
+
+        if (num_left == 0 && !checkWatcherTimeout) {
+          console.log('rescheduling')
+          checkWatcherTimeout = setTimeout(function(){ checkWatcherTimeout=null; checkWatchers() }, 5*60*1000)
         }
       })
     })
