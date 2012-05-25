@@ -1,12 +1,18 @@
 # apthunter
 ### a greasemonkey-style chrome extension for craigslist.org
 
-adds keyboard bindings to:
+![](http://f.cl.ly/items/3n2A3V1h3L1Y412j1J2H/Screen%20shot%202011-08-24%20at%2010.32.13%20PM.png)
+![](http://f.cl.ly/items/0v162S3m080S2I2I332C/Screen%20shot%202011-08-24%20at%2010.32.22%20PM.png)
 
-* navigate results (up/down/left/right or h/j/k/l)
-* highlight/ignore results
-* add notes/tags to results
-* show images/maps inline
+apthunter lets you monitor any craigslist search page and tells you when new results appear.
+
+it also adds keyboard bindings to listing and detail pages to:
+
+* navigate results using keyboard (up/down/left/right or h/j/k/l)
+* highlight results you like
+* dim results you want to ignore
+* add personal notes/tags to results
+* show images and maps inline without leaving the results listing
 
 originally developed for apartment listings, but works on any craigslist list/search or detail page.
 
@@ -57,3 +63,7 @@ yes, i know about padmapper. it's a great service. [use it](http://padmapper.com
 
 * [mailto: for chrome](https://chrome.google.com/webstore/detail/dgkkmcknielgdhebimdnfahpipajcpjn) for responding to craigslist postings via gmail
 
+## similar extensions
+
+* [Craigslist Helper](https://chrome.google.com/webstore/detail/naddbmiihfcdfaeencbcmbpioghcjlje) (also at http://ziink.com/)
+* [Craigslist Preview](https://chrome.google.com/webstore/detail/jmcbgcbedienblgnfeecolmmcgocefnf)
